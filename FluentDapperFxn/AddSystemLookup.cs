@@ -14,23 +14,26 @@ namespace FluentDapperFxn
 {
     public class AddSystemLookup
     {
-        private readonly ISystemLookupRepository _systemRepo;
         private readonly IValidator<SystemLookup> _validator;
-        public AddSystemLookup(ISystemLookupRepository systemRepo, IValidator<SystemLookup> validator)
+        public AddSystemLookup( IValidator<SystemLookup> validator)
         {
             _validator = validator;
-            _systemRepo = systemRepo;
         }
 
         [FunctionName("AddSystemLookup")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] SystemLookup syslookup,ILogger log)
         {
-            var content = await new StreamReader(req.Body).ReadToEndAsync();
-
-            var myClass = JsonConvert.DeserializeObject<SystemLookup>(content);
+                      
+            var validationResult = await _validator.ValidateAsync(syslookup);
+            if (validationResult.IsValid)
+            {
+                return new OkObjectResult(syslookup);
+            }
+            else
+            {
+                return new BadRequestObjectResult(validationResult);
+            }
             
-            var validationResult = _validator.Validate(myClass);
-            return new OkObjectResult(validationResult);
         }
     }
 }
