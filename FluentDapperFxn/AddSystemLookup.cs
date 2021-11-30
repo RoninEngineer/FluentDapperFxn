@@ -1,13 +1,9 @@
-using FluentDapperFxn.Data.Interface;
 using FluentDapperFxn.Domain.Dto;
 using FluentValidation;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace FluentDapperFxn
